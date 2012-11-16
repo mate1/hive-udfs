@@ -1,7 +1,7 @@
 import AssemblyKeys._
 assemblySettings
 
-name := "Hive UDFs"
+name := "hive-udfs"
 
 version := "0.0.1"
 
