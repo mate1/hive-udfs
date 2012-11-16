@@ -20,7 +20,7 @@ class DecodeURL extends UDF {
     try {
       URLDecoder.decode(rawWithStrippedTrailing, "UTF-8")
     } catch {
-      case _ => "Invalid"
+      case _ => "http://invalid-url-decoding.com"
     }
   }
 }

@@ -10,8 +10,8 @@ class DecodeURLSpec extends mutable.Specification {
       decoder.evaluate(null) mustEqual "Invalid"
     }
 
-    "return Invalid if there is an exception trying to decode the url" in {
-      decoder.evaluate("%%2") mustEqual "Invalid"
+    "return invalidurl.com if there is an exception trying to decode the url" in {
+      decoder.evaluate("%%2") mustEqual "http://invalid-url-decoding.com"
     }
 
     "return the url decoded value" in {
