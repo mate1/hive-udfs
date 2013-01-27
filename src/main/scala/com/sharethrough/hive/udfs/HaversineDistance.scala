@@ -3,6 +3,10 @@ package com.sharethrough.hive.udfs
 import org.apache.hadoop.hive.ql.exec.UDF
 import math._
 
+/**
+ * Hive UDF to compute the Haversine Distance between
+ * two points on the globe.
+ */
 class HaversinceDistance extends UDF {
   val earthRadiusInKm = 6372.8
 
