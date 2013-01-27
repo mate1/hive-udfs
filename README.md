@@ -2,7 +2,26 @@
 
 Collection of useful Hive UDFs
 
-##DecodeURL
+## Building the Project
+
+Building a jar containing these UDFs is simple. 
+
+First you will need:
+
+* Scala 2.9.2 or later
+* SBT 0.12.0 
+
+Then all you have to do is execute 1 command:
+
+```
+sbt assembly
+```
+
+This will create a jar including dependencies in ```target/hive-udf-assembly-VERSION.jar```
+
+## Available UDFs
+
+###DecodeURL
 UDF to decode a URI escaped URI. 
 
 Example:
@@ -19,7 +38,7 @@ LIMIT 10;
 ```
 
 
-## Haversine Distance
+### Haversine Distance
 
 UDF to compute the [haversine distance](http://en.wikipedia.org/wiki/Haversine_formula) between
 two pairs of coordinates.
