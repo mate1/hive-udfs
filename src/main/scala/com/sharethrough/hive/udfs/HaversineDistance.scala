@@ -6,6 +6,8 @@ import math._
 /**
  * Hive UDF to compute the Haversine Distance between
  * two points on the globe.
+ * This implementation was inspired by:
+ * http://rosettacode.org/wiki/Haversine_formula
  */
 class HaversinceDistance extends UDF {
   val earthRadiusInKm = 6372.8
