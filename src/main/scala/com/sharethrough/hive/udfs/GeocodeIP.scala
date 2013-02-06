@@ -3,6 +3,10 @@ package com.sharethrough.hive.udfs
 import org.apache.hadoop.hive.ql.exec.UDF
 import com.maxmind.geoip._
 
+/**
+ * Hive UDF to take an IP address and return a hashmap
+ * of relevant geocode data.
+ */
 class GeocodeIP(val pathToIPDatabase: String) extends UDF {
 
   val geocoder = new LookupService(
