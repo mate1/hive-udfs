@@ -9,6 +9,7 @@ class GeocodeIPSpec extends Specification {
       geocoder.evaluate("50.1.107.35", "city") must_== "Santa Rosa"
       geocoder.evaluate("50.1.107.35", "lat") must_== "38.392807"
       geocoder.evaluate("50.1.107.35", "lon") must_== "-122.7507"
+      geocoder.evaluate("50.1.107.35", "dma_code") must_== "807"
     }
 
     "return unknown if you ask for an invalid field name" in {

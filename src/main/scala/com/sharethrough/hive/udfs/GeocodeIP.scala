@@ -26,6 +26,7 @@ class GeocodeIP(val pathToIPDatabase: String) extends UDF {
       Map(
         "city" -> locationData.city,
         "country" -> locationData.countryName,
+        "dma_code" -> locationData.dma_code.toString,
         "lat" -> locationData.latitude.toString,
         "lon" -> locationData.longitude.toString
       ).getOrElse(fieldName, "unknown")
