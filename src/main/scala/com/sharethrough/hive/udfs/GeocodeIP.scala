@@ -9,9 +9,13 @@ import com.maxmind.geoip._
  */
 class GeocodeIP(val pathToIPDatabase: String) extends UDF {
 
-  val geocoder = new LookupService(
+  var geocoder = new LookupService(
     pathToIPDatabase,
     LookupService.GEOIP_MEMORY_CACHE);
+
+  def this() = {
+    this("GeoLiteCity.dat")
+  }
 
   def evaluate(ipAddress: String): Map[String, Any] = {
     val locationData = geocoder.getLocation(ipAddress)
