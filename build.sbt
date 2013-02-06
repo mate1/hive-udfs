@@ -9,6 +9,8 @@ scalaVersion := "2.9.2"
 
 organization := "com.sharethrough"
 
+test in assembly := {}
+
 resolvers += "Cascading repo" at "http://conjars.org/repo"
 
 resolvers ++= Seq(
