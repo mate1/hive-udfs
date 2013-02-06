@@ -5,24 +5,22 @@ import org.specs2.mutable._
 class GeocodeIPSpec extends Specification {
   "GeocodeIP.evaluate" should {
     val geocoder = new GeocodeIP("src/test/support/GeoLiteCity.dat")
-    "return a hashmap containing the geocoded data when given a valid ip" in {
-      val expectedOutput = Map(
-        "city" -> "Santa Rosa",
-        "country" -> "United States",
-        "lat" -> 38.392807F,
-        "lon" -> -122.7507F
-      )
-      geocoder.evaluate("50.1.107.35") must_== expectedOutput
+    "return the specified field from the geocoded IP" in {
+      geocoder.evaluate("50.1.107.35", "city") must_== "Santa Rosa"
+      geocoder.evaluate("50.1.107.35", "lat") must_== "38.392807"
+      geocoder.evaluate("50.1.107.35", "lon") must_== "-122.7507"
     }
 
-    "return an empty hashmap when given an invalid IP address" in {
-      val expectedOutput = Map.empty[String, Any]
-      geocoder.evaluate("127.0.0.1") must_== expectedOutput
+    "return unknown if you ask for an invalid field name" in {
+      geocoder.evaluate("50.1.107.35", "foobar") must_== "unknown"
     }
 
-    "return an emtpy hashmap when passed null for the IP address" in {
-      val expectedOutput = Map.empty[String, Any]
-      geocoder.evaluate(null) must_== expectedOutput
+    "return unknown if IP is invalid" in {
+      geocoder.evaluate("127.0.0.1", "lat") must_== "unknown"
+    }
+
+    "return unknown when passed null for the IP address" in {
+      geocoder.evaluate(null, "lat") must_== "unknown"
     }
   }
 }
