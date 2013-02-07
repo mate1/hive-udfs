@@ -24,9 +24,13 @@ This will create a jar including dependencies in ```target/hive-udf-assembly-VER
 ### GeocodeIP
 UDF to transform an IP address into a useful piece of geoip data
 
+Requires GeoLiteCity database to be present on all nodes, which can be accomplished
+using ```ADD FILE```.
+
 Example:
 
 ```sql
+ADD FILE hdfs://<path to GeoLiteCity.dat>;
 ADD JAR hdfs:///<path to jar>;
 CREATE TEMPORARY FUNCTION geocode_ip AS 'com.sharethrough.hive.udfs.GeocodeIP';
 
