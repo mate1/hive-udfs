@@ -21,22 +21,29 @@ This will create a jar including dependencies in ```target/hive-udf-assembly-VER
 
 ## Available UDFs
 
-###DecodeURL
-UDF to decode a URI escaped URI. 
+### GeocodeIP
+UDF to geocode an IP address into a HashMap of geocoded data
+
+```
+{
+  "city": city_name,
+  "country": country_name,
+  "lat": latitude,
+  "lon": longitude
+}
+```
 
 Example:
 
 ```sql
-
 ADD JAR hdfs:///<path to jar>;
-CREATE TEMPORARY FUNCTION decode_url AS 'com.sharethrough.hive.udfs.DecodeURL';
+CREATE TEMPORARY FUNCTION geocode_ip AS 'com.sharethrough.hive.udfs.GeocodeIP';
 
-SELECT decode_url(escaped_url)
-FROM logs
-LIMIT 10;
+SELECT
+  geocode_ip(remote_ip, '/path/to/geocode/file') as geodata
+FROM nginx_requests
 
 ```
-
 
 ### Haversine Distance
 
@@ -56,3 +63,20 @@ FROM user_checkins
 LIMIT 10;
 
 ```
+
+###DecodeURL
+UDF to decode a URI escaped URI. 
+
+Example:
+
+```sql
+
+ADD JAR hdfs:///<path to jar>;
+CREATE TEMPORARY FUNCTION decode_url AS 'com.sharethrough.hive.udfs.DecodeURL';
+
+SELECT decode_url(escaped_url)
+FROM logs
+LIMIT 10;
+
+```
+
