@@ -22,16 +22,7 @@ This will create a jar including dependencies in ```target/hive-udf-assembly-VER
 ## Available UDFs
 
 ### GeocodeIP
-UDF to geocode an IP address into a HashMap of geocoded data
-
-```
-{
-  "city": city_name,
-  "country": country_name,
-  "lat": latitude,
-  "lon": longitude
-}
-```
+UDF to transform an IP address into a useful piece of geoip data
 
 Example:
 
@@ -40,7 +31,8 @@ ADD JAR hdfs:///<path to jar>;
 CREATE TEMPORARY FUNCTION geocode_ip AS 'com.sharethrough.hive.udfs.GeocodeIP';
 
 SELECT
-  geocode_ip(remote_ip, '/path/to/geocode/file') as geodata
+  geocode_ip(remote_ip, 'city') as city,
+  geocode_ip(remote_ip, 'dma_code') as dma_code,
 FROM nginx_requests
 
 ```
