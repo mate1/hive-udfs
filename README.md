@@ -14,7 +14,7 @@ First you will need:
 Then all you have to do is execute 1 command:
 
 ```
-sbt assembly
+./sbt assembly
 ```
 
 This will create a jar including dependencies in ```target/hive-udf-assembly-VERSION.jar```
