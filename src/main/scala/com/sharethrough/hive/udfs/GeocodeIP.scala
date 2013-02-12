@@ -21,6 +21,9 @@ class GeocodeIP(val pathToIPDatabase: String) extends UDF {
   }
 
   def evaluate(ipAddress: String, fieldName: String): String = {
+    if(!validIpAddress(ipAddress)) {
+      return "unknown"
+    }
     val locationData = geocoder.getLocation(ipAddress)
     if (locationData != null) {
       Map(
@@ -34,5 +37,19 @@ class GeocodeIP(val pathToIPDatabase: String) extends UDF {
       "unknown"
     }
   }
+
+  private def validIpAddress(ipAddress: String): Boolean = {
+    if(ipAddress == null) return false
+    ipAddress.matches(GeocodeIP.ipAddressPattern)
+  }
 }
+
+object GeocodeIP {
+  val ipAddressPattern =
+    "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$".r
+}
+
 

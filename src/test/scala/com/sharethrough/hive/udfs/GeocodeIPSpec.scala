@@ -20,6 +20,10 @@ class GeocodeIPSpec extends Specification {
       geocoder.evaluate("127.0.0.1", "lat") must_== "unknown"
     }
 
+    "return unknown if IP is invalid string" in {
+      geocoder.evaluate("hello world", "lat") must_== "unknown"
+    }
+
     "return unknown when passed null for the IP address" in {
       geocoder.evaluate(null, "lat") must_== "unknown"
     }
