@@ -10,21 +10,15 @@ import com.maxmind.geoip._
  * Example:
  *  geocode_ip('127.0.0.1', 'city')
  */
-class GeocodeIP(val pathToIPDatabase: String) extends UDF {
+class GeocodeIP extends UDF {
 
-  var geocoder = new LookupService(
-    pathToIPDatabase,
-    LookupService.GEOIP_MEMORY_CACHE);
+  var _geocoder = None
 
-  def this() = {
-    this("GeoLiteCity.dat")
-  }
-
-  def evaluate(ipAddress: String, fieldName: String): String = {
+  def evaluate(ipAddress: String, fieldName: String, pathToIpDatabase: String): String = {
     if(!validIpAddress(ipAddress)) {
       return "unknown"
     }
-    val locationData = geocoder.getLocation(ipAddress)
+    val locationData = geocoder(pathToIpDatabase).getLocation(ipAddress)
     if (locationData != null) {
       Map(
         "city" -> locationData.city,
@@ -35,6 +29,18 @@ class GeocodeIP(val pathToIPDatabase: String) extends UDF {
       ).getOrElse(fieldName, "unknown")
     } else {
       "unknown"
+    }
+  }
+
+  private def geocoder(pathToIpDatabase: String): LookupService = {
+    _geocoder match {
+      case Some(lookupService) => lookupService
+      case None =>
+        var _geocoder = Some(
+          new LookupService(
+          pathToIPDatabase,
+          LookupService.GEOIP_MEMORY_CACHE))
+        _geocoder
     }
   }
 
