@@ -12,7 +12,7 @@ import com.maxmind.geoip._
  */
 class GeocodeIP extends UDF {
 
-  var _geocoder = None
+  var _geocoder: Option[LookupService] = None
 
   def evaluate(ipAddress: String, fieldName: String, pathToIpDatabase: String): String = {
     if(!validIpAddress(ipAddress)) {
@@ -36,11 +36,12 @@ class GeocodeIP extends UDF {
     _geocoder match {
       case Some(lookupService) => lookupService
       case None =>
-        var _geocoder = Some(
+        val lookupService =
           new LookupService(
-          pathToIPDatabase,
-          LookupService.GEOIP_MEMORY_CACHE))
-        _geocoder
+            pathToIpDatabase,
+            LookupService.GEOIP_MEMORY_CACHE)
+        var _geocoder = Some(lookupService)
+        lookupService
     }
   }
 
