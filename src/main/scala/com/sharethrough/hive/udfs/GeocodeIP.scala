@@ -8,7 +8,7 @@ import com.maxmind.geoip._
  * field from the geocoded data
  *
  * Example:
- *  geocode_ip('127.0.0.1', 'city')
+ *  geocode_ip('127.0.0.1', 'city', 'path to GeoLite DB in distributed cache')
  */
 class GeocodeIP extends UDF {
 

@@ -35,8 +35,8 @@ ADD JAR hdfs:///<path to jar>;
 CREATE TEMPORARY FUNCTION geocode_ip AS 'com.sharethrough.hive.udfs.GeocodeIP';
 
 SELECT
-  geocode_ip(remote_ip, 'city') as city,
-  geocode_ip(remote_ip, 'dma_code') as dma_code,
+  geocode_ip(remote_ip, 'city', 'GeoLiteCity.dat') as city,
+  geocode_ip(remote_ip, 'dma_code', 'GeoLiteCity.dat') as dma_code,
 FROM nginx_requests
 
 ```
