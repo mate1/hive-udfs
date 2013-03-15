@@ -35,13 +35,13 @@ class GeocodeIP extends UDF {
   private def geocoder(pathToIpDatabase: String): LookupService = {
     _geocoder match {
       case Some(lookupService) => lookupService
-      case None =>
-        val lookupService =
-          new LookupService(
-            pathToIpDatabase,
-            LookupService.GEOIP_MEMORY_CACHE)
-        var _geocoder = Some(lookupService)
+      case None => {
+        val lookupService = new LookupService(
+          pathToIpDatabase,
+          LookupService.GEOIP_MEMORY_CACHE)
+        _geocoder = Some(lookupService)
         lookupService
+      }
     }
   }
 
