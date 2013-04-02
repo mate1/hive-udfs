@@ -1,17 +1,21 @@
 package com.edate.data.hive.udf
 
+import scala.collection.JavaConversions._
 import org.apache.hadoop.hive.ql.exec.UDF
 import java.sql.Timestamp
 import java.sql.Date
+import com.jolbox.bonecp.BoneCPConfig
+import com.jolbox.bonecp.BoneCP
+import java.util.concurrent.ConcurrentSkipListMap
 
 /**
  * Hive UDF to get the currency rate from
- * the currency rate table at the given time.
+ * the currency rate table (in MySQL) at the given time.
+ * 
+ * Caches the entire table to avoid hitting the network.
  */
 class CurrencyRateAt extends UDF {
   
-  val curIds = Map(123 -> 0.9803407667, 826 -> 1.5208094402, 840 -> 1.0000000000)
-
   def evaluate(s:String, curId:Int): java.lang.Double = {
     
     try {
@@ -21,20 +25,60 @@ class CurrencyRateAt extends UDF {
     	new Date(Timestamp.valueOf(s).getTime())
       }
       
-      getRate(date, curId)
+      CurrencyRateAt.getRate(date, curId)
     } catch {
       case t:Throwable => null
     }
+  }  
+}
+
+object CurrencyRateAt {
+    
+  Class.forName("com.mysql.jdbc.Driver")
+  
+  protected val config = new BoneCPConfig()
+  config.setJdbcUrl("jdbc:mysql://backup.general.db.mate1:3306/general?zeroDateTimeBehavior=round&amp;jdbcCompliantTruncation=false")
+  config.setUsername("readonly")
+  config.setPassword("password")
+  config.setMinConnectionsPerPartition(5)
+  config.setMaxConnectionsPerPartition(10)
+  config.setPartitionCount(1)
+
+  val rate = "rate" // Double
+  val date = "date" // Date
+  val currencyId = "currency_id" // Int
+  val table = "CurrencyExchangeRate"
+  
+  val q = "SELECT %s, %s, %s FROM %s ORDER BY %s".format(rate, date, currencyId, table, date)
+  val pool = new BoneCP(config)
+  
+  val rates = new ConcurrentSkipListMap[Long, java.lang.Double]()
+  
+  loadRates()
+  
+  def loadRates() {
+    val conn = pool.getConnection()
+    val st = conn.createStatement()
+    val rs = st.executeQuery(q)
+    
+    while (rs.next()) {
+      try {
+        // "currencyId" concat'ed with unix_time(date).toString
+        val key = makeKey(Date.valueOf(rs.getString(date)).getTime(), rs.getInt(currencyId))
+        rates += (key -> new java.lang.Double(rs.getDouble(rate)))
+      } catch {
+        case t:Throwable =>
+      }
+    }
+    
+    rs.close()
+    st.close()
+    conn.close()
   }
   
-  protected def getRate(date:Date, curId:Int) : java.lang.Double = {
-    
-    // TODO: fetch this from the database
-    if (curIds.contains(curId)) {
-      curIds(curId)
-    } else {
-      null
-    }
+  def makeKey(date:Long, curId:Int) = (curId.toString + date.toString).toLong
+  
+  def getRate(date:Date, curId:Int) : java.lang.Double = {    
+    rates.get(rates.floorKey(makeKey(date.getTime(), curId)))
   }
-
 }
