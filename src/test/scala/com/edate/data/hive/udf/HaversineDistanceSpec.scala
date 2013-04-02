@@ -1,6 +1,8 @@
-package com.sharethrough.hive.udfs
+package com.edate.data.hive.udf
 
 import org.specs2.mutable._
+
+import com.edate.data.hive.udf.HaversinceDistance;
 
 class HaversinceDistanceSpec extends Specification {
   val haversinceCalculator = new HaversinceDistance

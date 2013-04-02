@@ -1,6 +1,8 @@
-package com.sharethrough.hive.udfs
+package com.edate.data.hive.udf
 
 import org.specs2._
+
+import com.edate.data.hive.udf.DecodeURL;
 
 class DecodeURLSpec extends mutable.Specification {
   val decoder = new DecodeURL

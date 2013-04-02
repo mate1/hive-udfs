@@ -1,4 +1,4 @@
-package com.sharethrough.hive.udfs
+package com.edate.data.hive.udf
 
 import org.apache.hadoop.hive.ql.exec.UDF
 import math._
