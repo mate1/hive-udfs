@@ -32,7 +32,7 @@ Example:
 ```sql
 ADD FILE hdfs://<path to GeoLiteCity.dat>;
 ADD JAR hdfs:///<path to jar>;
-CREATE TEMPORARY FUNCTION geocode_ip AS 'com.sharethrough.hive.udfs.GeocodeIP';
+CREATE TEMPORARY FUNCTION geocode_ip AS 'com.edate.data.hive.udf.GeocodeIP';
 
 SELECT
   geocode_ip(remote_ip, 'city', 'GeoLiteCity.dat') as city,
@@ -51,7 +51,7 @@ Example:
 ```sql
 
 ADD JAR hdfs:///<path to jar>;
-CREATE TEMPORARY FUNCTION haversine_distance AS 'com.sharethrough.hive.udfs.HaversinceDistance';
+CREATE TEMPORARY FUNCTION haversine_distance AS 'com.edate.data.hive.udf.HaversinceDistance';
 
 SELECT 
   haversine_distance(lon1, lat1, lon2, lat2) as distance
@@ -68,7 +68,7 @@ Example:
 ```sql
 
 ADD JAR hdfs:///<path to jar>;
-CREATE TEMPORARY FUNCTION decode_url AS 'com.sharethrough.hive.udfs.DecodeURL';
+CREATE TEMPORARY FUNCTION decode_url AS 'com.edate.data.hive.udf.DecodeURL';
 
 SELECT decode_url(escaped_url)
 FROM logs
