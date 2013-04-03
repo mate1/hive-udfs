@@ -37,17 +37,17 @@ object CurrencyRateAt {
   Class.forName("com.mysql.jdbc.Driver")
   
   protected val config = new BoneCPConfig()
-  config.setJdbcUrl("jdbc:mysql://backup.general.db.mate1:3306/general?zeroDateTimeBehavior=round&amp;jdbcCompliantTruncation=false")
-  config.setUsername("readonly")
-  config.setPassword("password")
+  config.setJdbcUrl(Config().getString("hive-udfs.db.url"))
+  config.setUsername(Config().getString("hive-udfs.db.username"))
+  config.setPassword(Config().getString("hive-udfs.db.password"))
   config.setMinConnectionsPerPartition(5)
   config.setMaxConnectionsPerPartition(10)
   config.setPartitionCount(1)
 
-  val rate = "rate" // Double
-  val date = "date" // Date
-  val currencyId = "currency_id" // Int
-  val table = "CurrencyExchangeRate"
+  val rate = Config().getString("hive-udf.db.field.rate") // Double
+  val date = Config().getString("hive-udf.db.field.rate") // Date
+  val currencyId = Config().getString("hive-udf.db.field.rate") // Int
+  val table = Config().getString("hive-udf.db.table")
   
   val q = "SELECT %s, %s, %s FROM %s ORDER BY %s".format(rate, date, currencyId, table, date)
   val pool = new BoneCP(config)
